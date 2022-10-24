@@ -1,12 +1,18 @@
-
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Button } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  Button,
+} from "react-native";
 // import ProfileScreen from './ProfileScreen';
-import Top from './Top';
-import Center from './Center';
-import Bottom from './Bottom';
-import React, { Component, useEffect, useState } from 'react';
-
+import Top from "./Top";
+import Center from "./Center";
+import Bottom from "./Bottom";
+import React, { Component, useEffect, useState } from "react";
 
 //   // Import the functions you need from the SDKs you need
 //   import firebase, { initializeApp } from "firebase/app";
@@ -33,24 +39,24 @@ import React, { Component, useEffect, useState } from 'react';
 // // Initialize Firebase
 // initializeApp(firebaseConfig);
 
-
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import "firebase/compat/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCK2gse2S4gzT4tqStLYR-ub81aLiV07Ig",
-  authDomain: "bcs20-ce9d9.firebaseapp.com",
-  projectId: "bcs20-ce9d9",
-  storageBucket: "bcs20-ce9d9.appspot.com",
-  messagingSenderId: "700617627214",
-  appId: "1:700617627214:web:a9c1fc4aeacbd5d178151f"
+  apiKey: "AIzaSyA6BC4xWCCDBRZB76Vv3-2nGjjbBvEjdME",
+  authDomain: "mad-35a26.firebaseapp.com",
+  projectId: "mad-35a26",
+  storageBucket: "mad-35a26.appspot.com",
+  messagingSenderId: "751256381328",
+  appId: "1:751256381328:web:60333c0fb39ef414adf515",
+  measurementId: "G-W8SF35H2BC",
 };
 
 let app;
 
 if (firebase.apps.length === 0) {
-  app = firebase.initializeApp(firebaseConfig)
+  app = firebase.initializeApp(firebaseConfig);
 } else {
   app = firebase.app();
 }
@@ -58,98 +64,79 @@ if (firebase.apps.length === 0) {
 const db = app.firestore();
 const auth = firebase.auth();
 
-export default function Home({navigation}) {
-
-  const createUser = () => {
-    auth.createUserWithEmailAndPassword('akhzarn@yahoo.com','123456')
-    .then( data =>{
-      // QUERY Firestore Ko Data Send Kar dain gai
-      console.log('firebase return is = ',data)
-    }).catch(error=>{
-      console.log('Catch Error',error)
-    })
-  }
-  
-  const loginUser = () => {
-    auth.signInWithEmailAndPassword('akhzarn@yahoo.com','123456')
-    .then( data =>{
-      // QUERY Firestore Ko Data Send Kar dain gai
-      console.log('firebase return is = ',data)
-    }).catch(error=>{
-      console.log('Catch Error',error)
-    })
-  }
-  
+export default function Home({ navigation }) {
   const guestUser = () => {
-    auth.signInAnonymously()
-    .then( data =>{
-      // QUERY Firestore Ko Data Send Kar dain gai
-      console.log('firebase return is = ',data)
-    }).catch(error=>{
-      console.log('Catch Error',error)
-    })
-  }
-  
+    auth
+      .signInAnonymously()
+      .then((data) => {
+        // QUERY Firestore Ko Data Send Kar dain gai
+        console.log("firebase return is = ", data);
+      })
+      .catch((error) => {
+        console.log("Catch Error", error);
+      });
+  };
+
   const logoutUser = () => {
-    auth.onAuthStateChanged(user=>{
-      if(user){
-        console.log('Logged in user is =', user)
-        auth.signOut()
-      }else{
-        console.log('No One is =', user)
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        console.log("Logged in user is =", user);
+        auth.signOut();
+      } else {
+        console.log("No One is =", user);
       }
-    })
-  }
-
-  useEffect(()=>{
-    global.setting={
-      fs:50,
-      fc:'green',
-      bc:'white'
-    }
-
-
-      // const subscriber = db
-      //   .collection('student')
-      //   .doc('mRlPpQtQzjEYB7jCulei')
-      //   .onSnapshot(documentSnapshot => {
-      //     console.log('User data: ', documentSnapshot.data());
-      //   });
-      // // Stop listening for updates when no longer required
-      // return () => subscriber();
-        
-  const subscriber = db
-  .collection('student')
-  .get()
-  .then(querySnapshot => {
-    console.log('Total users: ', querySnapshot.size);
-    querySnapshot.forEach(documentSnapshot => {
-      console.log('User ID: ', documentSnapshot.id, documentSnapshot.data());
     });
-  });
-  return () => subscriber();
+  };
 
-  }, [])
+  useEffect(() => {
+    global.setting = {
+      fs: 50,
+      fc: "green",
+      bc: "white",
+    };
 
-  const [fonts, setFonts] = useState(16)
+    // const subscriber = db
+    //   .collection('student')
+    //   .doc('mRlPpQtQzjEYB7jCulei')
+    //   .onSnapshot(documentSnapshot => {
+    //     console.log('User data: ', documentSnapshot.data());
+    //   });
+    // // Stop listening for updates when no longer required
+    // return () => subscriber();
+
+    const subscriber = db
+      .collection("student")
+      .get()
+      .then((querySnapshot) => {
+        console.log("Total users: ", querySnapshot.size);
+        querySnapshot.forEach((documentSnapshot) => {
+          console.log(
+            "User ID: ",
+            documentSnapshot.id,
+            documentSnapshot.data()
+          );
+        });
+      });
+    return () => subscriber;
+  }, []);
+
+  const [fonts, setFonts] = useState(16);
 
   useEffect(() => {
     // console.log('navigation useEffect is =')
-    const unsubscribe = navigation.addListener('focus', () => {
-      setFonts(global.setting.fs)
-      
-      console.log('navigation useEffect is Called=', global.setting)
+    const unsubscribe = navigation.addListener("focus", () => {
+      setFonts(global.setting.fs);
 
+      console.log("navigation useEffect is Called=", global.setting);
     });
     return unsubscribe;
   }, [navigation]);
 
   return (
-    <View style={{flex:1, backgroundColor:'white'}}>
-      
-      {console.log('Return')}
+    <View style={{ flex: 1, backgroundColor: "white" }}>
+      {console.log("Return")}
 
-      <Text style={{fontSize:fonts}}> We are testing </Text>
+      <Text style={{ fontSize: fonts }}> We are testing </Text>
 
       {/* <Button
           title="Go to Next Screen"
@@ -157,7 +144,7 @@ export default function Home({navigation}) {
           navigation.navigate('ProfileScreen',{id:'hef34231'})
         }
         /> */}
-      
+
       {/* <Button
           title="Go to Setting Screen"
           onPress={() =>
@@ -165,7 +152,7 @@ export default function Home({navigation}) {
         }
         /> */}
 
-        {/* <Button
+      {/* <Button
           title="Go to Chatting Screen"
           onPress={() =>
           navigation.navigate('Chatting',{id:'bcs1920cs'})
@@ -173,39 +160,18 @@ export default function Home({navigation}) {
         /> */}
 
       <Button
-          title="Go to Next Functional Component"
-          onPress={() =>
-            navigation.navigate('HomeForFunctional')
-          }
-        />
+        title="Create USer"
+        onPress={() => navigation.navigate("SignUpScreen")}
+      />
 
       <Button
-          title="Go to Next Class Component"
-          onPress={() =>
-            navigation.navigate('HomeForClass')
-          }
-        />
+        title="Firebase Sign In"
+        onPress={() => navigation.navigate("LoginScreen")}
+      />
 
-      <Button
-          title="Create USer"
-          onPress={createUser}
-        />
-     
-     <Button
-          title="Firebase Sign In"
-          onPress={loginUser}
-        />
-     
-     <Button
-          title="Guest User"
-          onPress={guestUser}
-        />
+      <Button title="Guest User" onPress={guestUser} />
 
-    <Button
-          title="Log Out User"
-          onPress={logoutUser}
-        />
-
+      <Button title="Log Out User" onPress={logoutUser} />
     </View>
   );
 }
@@ -213,17 +179,11 @@ export default function Home({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
-
-
-
-
-
-
 
 // import { StatusBar } from 'expo-status-bar';
 // import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Button } from 'react-native';
@@ -304,7 +264,6 @@ const styles = StyleSheet.create({
 // //     // console.log('useEffect flag Value is =',flag)
 // // },[number])
 
-
 // //   useEffect(()=>{
 // //     flag = 190;
 // //     console.log('useEffect []', flag);
@@ -346,12 +305,12 @@ const styles = StyleSheet.create({
 //   //   console.log('useEffect', flag);
 //   //   setCount(count+1);
 //   // },[props])
-  
+
 //   render(){
 //   return (
 //     <View style={{flex:1, backgroundColor:'black'}}>
 //       {console.log('Return')}
-      
+
 //       {/* <Top name="Akhzar Nazir" /> */}
 //       {/* <Center /> */}
 //       {/* <Bottom /> */}
@@ -364,7 +323,7 @@ const styles = StyleSheet.create({
 //         />
 
 //       <Button title='Minus' onPress={()=>this.setState({count:1})} />
-      
+
 //       <Button
 //           title="Go to Setting Screen"
 //           onPress={() =>
@@ -373,11 +332,11 @@ const styles = StyleSheet.create({
 //         />
 
 //     {/* <Button title='PLUS' onPress={()=>setCount(count+1)} />
-      
+
 //     <Button title='Minus' onPress={()=>setCount(count-1)} />
-    
+
 //     <Button title='Number' onPress={()=>setNumber(number+1)} /> */}
-     
+
 //     </View>
 //   );
 //   }
